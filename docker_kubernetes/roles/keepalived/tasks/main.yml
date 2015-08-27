@@ -1,0 +1,10 @@
+---
+- name: Ensure keepalived is installed
+  yum: name=keepalived
+
+- name: Ensure keepalived conf is set
+  template: src=keepalived.conf.j2 dest=/etc/keepalived/keepalived.conf
+  notify: restart keepalived
+
+- name: Ensure keepalived is started
+  service: name=keepalived state=started enabled=yes

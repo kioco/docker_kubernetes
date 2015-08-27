@@ -1,0 +1,87 @@
+# Account name of remote user. Ansible will use this user account to ssh into
+# the managed machines. The user must be able to use sudo without asking
+# for password.
+ansible_ssh_user: root
+
+# Kubernetes internal network for services.
+# Kubernetes services will get fake IP addresses from this range.
+# This range must not conflict with anything in your infrastructure. These
+# addresses do not need to be routable and must just be an unused block of space.
+kube_service_addresses: 10.254.0.0/16
+
+# Flannel internal network (optional). When flannel is used, it will assign IP
+# addresses from this range to individual pods.
+# This network must be unused in your network infrastructure!
+kube_overlay_ip: 172.17.0.0
+# Prefix length of kube_overlay_ip range.
+kube_overlay_prefix: 16
+
+
+# Internal DNS configuration.
+# Kubernetes can create and mainatain its own DNS server to resolve service names
+# into appropriate IP addresses. It's highly advisable to run such DNS server,
+# as it greatly simplifies configuration of your applications - you can use
+# service names instead of magic environment variables.
+# You still must manually configure all your containers to use this DNS server,
+# Kubernetes won't do this for you (yet).
+
+# Turn this varable to 'false' to disable whole DNS configuration.
+dns_setup: false
+
+# Internal DNS domain name.
+# This domain must not be used in your network. Services will be discoverable
+# under <service-name>.<namespace>.<domainname>, e.g.
+# myservice.default.kube.local
+dns_domain: tin.local
+
+# IP address of the DNS server.
+# Kubernetes will create a pod with several containers, serving as the DNS
+# server and expose it under this IP address. The IP address must be from
+# the range specified as kube_service_addresses above.
+# And this is the IP address you should use as address of the DNS server
+# in your containers.
+dns_server: 10.254.0.10
+
+############## HA PROXY
+# Variables for the HAproxy configuration
+
+#Port for docker container, they created by kubernetes services
+httpd_port: 80
+ccf_port: 8080
+repo_port: 18080
+
+# HAProxy supports "http" and "tcp". For SSL, SMTP, etc, use "tcp".
+mode: http
+
+# Port on which HAProxy should listen
+ccflistenport: 8080
+repolistenport: 18080
+cjalistenport: 80
+
+# A name for the proxy daemon, this wil be the suffix in the logs.
+ccfdaemonname: ccfapplb
+repodaemonname: repoapplb
+cjadaemonname: cjaapplb
+
+# Balancing Algorithm. Available options:
+# roundrobin, source, leastconn, source, uri
+# (if persistance is required use, "source")
+balance: roundrobin
+
+#This is virtual IP address, it's created by keepalived
+virtualip: 10.76.0.222
+
+service_ip_8080:
+  - 10.254.152.2
+
+service_ip_80:
+  - 10.254.152.3
+
+############KeepAlived
+# Keepalived config
+keepalived_bind_interface: ens32
+keepalived_vip: 10.76.0.222
+
+############Containers deployment
+#Here is will store your Dockerfile
+path_dockerfile: /root/dockerfile

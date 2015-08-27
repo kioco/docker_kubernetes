@@ -1,0 +1,13 @@
+---
+- hosts: masters-etcd
+  sudo: yes
+  roles:
+          - flannel-config
+
+- hosts:
+        - masters-etcd
+        - minions
+  sudo: yes
+  roles:
+          - common
+          - flannel

@@ -1,0 +1,4 @@
+- name: Disable firewalld and stopped
+  service: name=firewalld state=stopped enabled=no
+  register: command_result
+  failed_when: "command_result|failed and 'cannot find' not in command_result.msg"

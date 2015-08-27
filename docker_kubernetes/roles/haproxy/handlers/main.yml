@@ -1,0 +1,8 @@
+---
+# Handlers for HAproxy
+
+- name: restart keepalived
+  service: name=haproxy state=restarted
+
+- name: reload keepalived
+  service: name=haproxy state=reloaded

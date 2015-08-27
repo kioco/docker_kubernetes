@@ -1,0 +1,20 @@
+---
+- hosts: all
+  sudo: yes
+  roles:
+          - { role: common, tags: [ 'allcommon' ] }
+
+- hosts: masters-etcd
+  sudo: yes
+  roles:
+          - { role: kubernetes, tags: [ 'mastersetcdkuber' ] }
+          - { role: etcd, tags: [ 'mastersetcdetcd' ] }
+          - { role: master, tags: [ 'mastersetcdmaster' ] }
+
+- hosts: minions
+  sudo: yes
+  roles:
+          - { role: kubernetes, tags: [ 'minionskuber' ] }
+          - { role: minion, tags: [ 'minionsminion' ] }
+          - { role: haproxy, tags: [ 'minionshaproxy' ] }
+          - { role: keepalived, tags: [ 'minionskeepalived' ] }

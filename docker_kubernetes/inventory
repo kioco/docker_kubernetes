@@ -1,0 +1,6 @@
+[masters-etcd]
+10.76.0.216
+
+[minions]
+10.76.0.224 keepalived_priority=100
+10.76.0.225 keepalived_priority=101
